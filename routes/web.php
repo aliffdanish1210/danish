@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Redirect root to dashboard/home
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('home');
 });
+
+// Authentication routes
+Auth::routes();
+
+// Dashboard/home route
+Route::get('/home', [HomeController::class, 'index'])->name('home');
