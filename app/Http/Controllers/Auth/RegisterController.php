@@ -45,14 +45,19 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      */
     protected function create(array $data)
-    {
-        return User::create([
-            'name'       => $data['name'],
-            'user_id'    => $data['user_id'],
-            'email'      => $data['email'], 
-            'password'   => Hash::make($data['password']),
-            'is_active'  => 1,
-            'is_locked'  => 0,
-        ]);
-    }
+{
+    $user = User::create([
+        'name'       => $data['name'],
+        'user_id'    => $data['user_id'],
+        'email'      => $data['email'],
+        'password'   => Hash::make($data['password']),
+        'is_active'  => 1,
+        'is_locked'  => 0,
+    ]);
+
+    // ✅ DEFAULT ROLE
+    $user->assignRole('user');
+
+    return $user;
+}
 }

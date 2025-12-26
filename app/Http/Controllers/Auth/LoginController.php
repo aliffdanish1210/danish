@@ -197,9 +197,20 @@ class LoginController extends Controller
             }
 
             return $this->success('Logout successful');
+            Auth::logout();                     
+
+            return redirect()->route('login');
         } catch (\Throwable $e) {
             report($e);
             return $this->failed('Token revocation failed');
         }
     }
+
+    protected function authenticated(Request $request, $user)
+{
+    if ($user->hasRole('admin')) {
+        return redirect()->route('admin.dashboard');
+    }
+    return redirect()->route('home');
+}
 }

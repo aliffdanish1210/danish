@@ -17,8 +17,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             PasswordPoliciesSeeder::class,
+            RoleSeeder::class,
+            AdminRoleSeeder::class,
+            OptionSeeder::class,
             PermissionSeeder::class,
-            OptionSeeder::class
         ]);
     }
 }

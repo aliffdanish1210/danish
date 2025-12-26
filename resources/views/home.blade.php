@@ -25,26 +25,23 @@
                         <li><strong>Email:</strong> {{ auth()->user()->email ?? 'N/A' }}</li>
                     </ul>
 
-                    <h5>Roles & Permissions</h5>
+                    <h5>Role</h5>
                     <ul>
-                        @foreach (auth()->user()->getRoleNames() as $role)
-                            <li>{{ $role }}</li>
-                        @endforeach
+                        <li>{{ auth()->user()->role ?? 'N/A' }}</li>
                     </ul>
 
-                    @if(auth()->user()->hasRole('Admin'))
+                    @if(auth()->user()->role === 'admin')
                         <h5>Admin Tools</h5>
                         <ul>
-                            <li><a href="{{ route('auditLogs.index') }}">View Audit Logs</a></li>
                             <li><a href="{{ route('events.index') }}">Manage Events</a></li>
-                            <li><a href="{{ route('users.index') }}">Manage Users</a></li>
+                            <li><a href="{{ route('admin.dashboard') }}">Manage Users</a></li>
                         </ul>
                     @endif
 
                     <h5>Modules</h5>
                     <ul>
-                        <li><a href="{{ route('events.register') }}">Event Registration</a></li>
-                        <li><a href="{{ route('profile.show') }}">User Profile</a></li>
+                        <li><a href="{{ route('events.create') }}">Event Registration</a></li>
+                        <li><a href="{{ route('profile.edit') }}">User Profile</a></li>
                     </ul>
                 </div>
             </div>
