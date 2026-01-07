@@ -22,17 +22,6 @@ class HomeController extends Controller
     {
         $user = Auth::user(); // Get the currently logged-in user
 
-        // Example dashboard data
-        $dashboardData = [
-            'user_id' => $user->user_id,
-            'name' => $user->name ?? 'N/A',
-            'email' => $user->email ?? 'N/A',
-            'roles' => $user->getRoleNames(), // if using Spatie roles
-            'permissions' => $user->getAllPermissions(), // custom method
-            'current_signin' => $user->current_signin,
-            'last_signin' => $user->last_signin,
-        ];
-
-        return view('home', compact('dashboardData'));
+        return view('home', compact('user')); // Pass user data to the home view
     }
 }

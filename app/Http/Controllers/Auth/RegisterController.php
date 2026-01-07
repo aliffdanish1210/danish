@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -45,19 +46,43 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      */
     protected function create(array $data)
-{
-    $user = User::create([
-        'name'       => $data['name'],
-        'user_id'    => $data['user_id'],
-        'email'      => $data['email'],
-        'password'   => Hash::make($data['password']),
-        'is_active'  => 1,
-        'is_locked'  => 0,
-    ]);
+    {
+        $user = User::create([
+            'name'       => $data['name'],
+            'user_id'    => $data['user_id'],
+            'email'      => $data['email'],
+            'password'   => Hash::make($data['password']),
+            'is_active'  => 1,
+            'is_locked'  => 0,
+            'mfa_enabled' => true,
+            'mfa_method' => 'email',
+        ]);
 
-    // ✅ DEFAULT ROLE
-    $user->assignRole('user');
+        // Assign default role
+        $user->assignRole('user');
 
-    return $user;
-}
+        return $user;
+    }
+
+    /**
+     * Handle a registration request for the application.
+     * Overriding to send verification email.
+     */
+    public function register(\Illuminate\Http\Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        // Create the user
+        $user = $this->create($request->all());
+
+        // Fire Registered event to send verification email
+        event(new Registered($user));
+
+        // Optional: log the user in
+        $this->guard()->login($user);
+
+        // Redirect to a page telling user to verify email
+        return redirect($this->redirectPath())
+            ->with('success', 'Registration successful! Please check your email to verify your account.');
+    }
 }

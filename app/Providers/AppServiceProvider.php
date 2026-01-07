@@ -7,25 +7,21 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
     public function register()
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
     public function boot()
-{
-    if (app()->environment('local')) {
-        URL::forceScheme('https');
+    {
+        // Force HTTP in local environment
+        if (app()->environment('local')) {
+            URL::forceScheme('http');
+        }
+        
+        // Force HTTPS in production
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
-}
 }

@@ -28,12 +28,15 @@ use App\Http\Controllers\AuditLogsController;
 // Route::get('login', [LoginController::class, 'loginGet']);
 Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::post('refreshToken', [LoginController::class, 'refreshToken']);
+Route::post('/verify-mfa', [LoginController::class, 'verifyMFA']);
 Route::post('password/firstTime', [ProfilesController::class, 'firstTimeLogin']);
 Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
 Route::post('password/reset', [ResetPasswordController::class, 'reset']);
-Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('logout', [LoginController::class, 'logout'])
+    ->middleware('auth:api')
+    ->name('logout');
 // Dashboard/home route
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+//Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::group(['middleware' => ['auth:api', 'forcePwdChg']], function () {
     Route::group(['prefix' => 'user'], function () {
         Route::get('/', [ProfilesController::class, 'me'])->withoutMiddleware('forcePwdChg');

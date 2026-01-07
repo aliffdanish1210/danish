@@ -37,11 +37,26 @@
 
                         {{-- ADMIN MENU (ONLY ADMIN CAN SEE) --}}
                         @role('admin')
-                            <li class="nav-item">
-                                <a class="nav-link fw-bold text-warning"
-                                   href="{{ route('admin.dashboard') }}">
-                                    Admin Panel
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fw-bold text-warning" 
+                                   href="#" 
+                                   role="button" 
+                                   data-bs-toggle="dropdown">
+                                    <i class="bi bi-shield-lock"></i> Admin Panel
                                 </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                            <i class="bi bi-speedometer2"></i> Dashboard
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('audit.logs') }}">
+                                            <i class="bi bi-journal-text"></i> Audit Logs
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         @endrole
                     @endauth

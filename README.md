@@ -1,3 +1,7 @@
+//to implement passport in our system
+php artisan key:generate
+php artisan passport:install
+
 
 php artisan make:migration add_role_to_users_table --table=users
 php artisan make:middleware RoleMiddleware
@@ -29,7 +33,19 @@ public function boot()
     }
 }
 
-for publish the github
+//for publish the github
 git add .
 git commit -m ""
 git push
+
+//for the file upload security
+php artisan make:migration add_profile_image_to_users_table
+public function up()
+{
+    Schema::table('users', function (Blueprint $table) {
+        $table->string('profile_image')->nullable();
+    });
+}
+
+//for do the MFA
+php artisan make:migration add_mfa_fields_to_users_table --table=users
