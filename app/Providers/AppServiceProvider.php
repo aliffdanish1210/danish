@@ -14,10 +14,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        // Force HTTP in local environment
+        // Force HTTPS in local environment
         if (app()->environment('local')) {
-            URL::forceScheme('http');
-        }
+        URL::forceScheme('https');
+    }
         
         // Force HTTPS in production
         if (app()->environment('production')) {

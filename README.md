@@ -1,51 +1,48 @@
+Project Name: [Insert Project Name]
+Project Description
+This is a secure web application built with the Laravel framework. The system focuses on robust user management, incorporating multi-role access control, secure file uploads, and advanced authentication layers to ensure data integrity and user privacy.
+2. Installation Steps
+Follow these steps to set up the project locally:
+
+Clone the repository:
+git clone
+cd danish
+
+Install PHP dependencies:
+composer install
+npm install && npm run dev
+Configure Environment: Copy .env.example to .env and update your database credentials.
+
+Initialize Passport Security:
 //to implement passport in our system
 php artisan key:generate
 php artisan passport:install
 
+3. Security Features Summary
+MFA (Multi-Factor Authentication): Enhanced login security via Google Authenticator or SMS codes.
 
-php artisan make:migration add_role_to_users_table --table=users
-php artisan make:middleware RoleMiddleware
-php artisan make:model Event -m
-php artisan migrate
-php artisan make:controller EventController --resource
-php artisan make:policy EventPolicy --model=Event
-php artisan make:controller ProfileController
+Role-Based Access Control (RBAC): Managed via Spatie/Laravel-Permission to restrict access based on user roles (Admin, User, etc.).
 
-//for after change need to clear all things first before refresh the web
-php artisan route:clear
-php artisan view:clear 
-php artisan config:cache                                               
-php artisan cache:clear
+Force HTTPS: SSL/TLS enforcement in the AppServiceProvider to encrypt data in transit.
 
-//for the all change to clear all things (just one command)
+Policy Protection: Using Laravel Policies to authorize specific actions on models.
+
+4. How to Run the App
+To start the local development server:
+php artisan serve
+
+If you make changes to configurations or routes, clear the cache using:
 php artisan optimize:clear
 
-//for the role permission
-composer require spatie/laravel-permission
-php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
-php artisan migrate
+5. Dependencies
+Framework: Laravel
 
-//for secure https
-public function boot()
-{
-    if (app()->environment('local')) {
-        URL::forceScheme('https');
-    }
-}
+Authentication: Laravel Passport
 
-//for publish the github
-git add .
-git commit -m ""
-git push
+Permissions: Spatie Laravel-Permission
 
-//for the file upload security
-php artisan make:migration add_profile_image_to_users_table
-public function up()
-{
-    Schema::table('users', function (Blueprint $table) {
-        $table->string('profile_image')->nullable();
-    });
-}
+Frontend: Laravel Mix / Webpack
 
-//for do the MFA
-php artisan make:migration add_mfa_fields_to_users_table --table=users
+6. Screenshot(s) of system
+![login page](image.png)
+![dashbord page](image-1.png)
