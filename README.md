@@ -1,4 +1,4 @@
-Project Name: [Insert Project Name]
+Project Name: [Event Registration System]
 Project Description
 This is a secure web application built with the Laravel framework. The system focuses on robust user management, incorporating multi-role access control, secure file uploads, and advanced authentication layers to ensure data integrity and user privacy.
 2. Installation Steps
