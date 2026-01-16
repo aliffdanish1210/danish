@@ -49,7 +49,7 @@ class LoginController extends Controller
             try {
                 $request->validate([
                     'user_id' => 'required|string|max:255',
-                    'password' => 'required|string',
+                    'password' => ['required', 'string', 'min:8', 'confirmed'],
                     'pat' => 'nullable|boolean'
                 ]);
             } catch (ValidationException $e) {
