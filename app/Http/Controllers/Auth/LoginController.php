@@ -40,7 +40,36 @@ class LoginController extends Controller
         return 'user_id';
     }
 
+    /**
+     * Browser form  -> session login, then redirect to /home (no JSON/token shown).
+     * API / JSON    -> unchanged: returns the JSON with the token.
+     */
     public function login(Request $request)
+    {
+        $response = $this->performLogin($request);
+
+        if ($this->isApiRequest($request)) {
+            return $response;
+        }
+
+        $data = $response instanceof \Illuminate\Http\JsonResponse ? $response->getData(true) : [];
+
+        if (!empty($data['status']) && Auth::check()) {
+            $request->session()->regenerate();
+            return redirect()->intended('/home');
+        }
+
+        return back()
+            ->withInput($request->except('password'))
+            ->withErrors(['user_id' => $data['message'] ?? 'Login failed.']);
+    }
+
+    private function isApiRequest(Request $request)
+    {
+        return $request->expectsJson() || $request->is('api/*');
+    }
+
+    private function performLogin(Request $request)
     {
         DB::beginTransaction();
         
@@ -49,7 +78,7 @@ class LoginController extends Controller
             try {
                 $request->validate([
                     'user_id' => 'required|string|max:255',
-                    'password' => ['required', 'string', 'min:8', 'confirmed'],
+                    'password' => 'required|string',
                     'pat' => 'nullable|boolean'
                 ]);
             } catch (ValidationException $e) {
@@ -338,7 +367,9 @@ class LoginController extends Controller
         try {
             // Generate token
             try {
-                if ($request->pat) {
+                if (!$this->isApiRequest($request)) {
+                    $tokenObj = null; // browser login uses the session, no token needed
+                } elseif ($request->pat) {
                     $tokenData = $user->createToken("User {$user->id} Personal Access Token");
                     $tokenObj = [
                         'token_type' => 'Bearer',

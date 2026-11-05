@@ -58,18 +58,27 @@ class ForgotPasswordController extends Controller
 
             $reset = (object) array();
 
-            $reset->link = config('app.url_fe') . "/password/reset/$token";
+            // Base URL of the page that hosts the reset form.
+            // Uses APP_FE if set, otherwise the URL this app is actually served from.
+            $baseUrl = rtrim(config('app.url_fe') ?: url('/'), '/');
+
+            $reset->link = $baseUrl . "/password/reset/$token";
             $reset->appName = config('app.name');
-            $reset->appURL = config('app.url_fe');
+            $reset->appURL = $baseUrl;
             $reset->userName = $user->name;
 
-            Mail::to($user->email)->send(new APIResetPassword($reset));
-
-            if(Mail::failures()) {
+            try {
+                Mail::to($user->email)->send(new APIResetPassword($reset));
+            } catch (\Throwable $e) {
+                // Real cause (SMTP auth, TLS, etc.) goes to storage/logs/laravel.log
+                \Log::error('Reset link email failed', [
+                    'user_id' => $request->user_id,
+                    'error' => $e->getMessage()
+                ]);
                 return $this->failure("Failed to send reset link email.");
-            } else {
-                return $this->success("Please check your email for reset link.");
             }
+
+            return $this->success("Please check your email for reset link.");
         } else {
             return $this->failure("User ID not found");
         }

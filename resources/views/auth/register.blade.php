@@ -1,28 +1,30 @@
 @extends('layouts.app')
 
-@section('title', 'Register')
+@section('title', 'Register - ITDMS')
 
 @section('content')
 <div class="container">
     <div class="row justify-content-center mt-5">
-        <div class="col-md-6">
-            <div class="card shadow-lg">
-                <div class="card-header text-center bg-primary text-white">
-                    <h4>{{ __('Register MyEventSystem Account') }}</h4>
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-header text-center bg-primary text-white py-3">
+                    <h4 class="mb-1 fw-bold">{{ __('ITDMS User Enrollment') }}</h4>
+                    <small class="text-white-50">{{ __('Insider Threat Detection & Mitigation System') }}</small>
                 </div>
 
                 <div class="card-body p-4">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 
-                        <!-- Name -->
+                        <!-- Full Name -->
                         <div class="mb-3">
-                            <label class="form-label">Name</label>
-                            <input type="text"
+                            <label for="name" class="form-label fw-semibold">{{ __('Full Name') }}</label>
+                            <input id="name" type="text"
                                 class="form-control @error('name') is-invalid @enderror"
                                 name="name"
                                 value="{{ old('name') }}"
-                                required>
+                                placeholder="e.g. John Doe"
+                                required autofocus>
 
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -31,11 +33,12 @@
 
                         <!-- User ID -->
                         <div class="mb-3">
-                            <label class="form-label">User ID</label>
-                            <input type="text"
+                            <label for="user_id" class="form-label fw-semibold">{{ __('User ID') }}</label>
+                            <input id="user_id" type="text"
                                 class="form-control @error('user_id') is-invalid @enderror"
                                 name="user_id"
                                 value="{{ old('user_id') }}"
+                                placeholder="Choose a unique ID (e.g. staff123)"
                                 required>
 
                             @error('user_id')
@@ -43,13 +46,14 @@
                             @enderror
                         </div>
 
-                        <!-- Email -->
+                        <!-- Email Address -->
                         <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email"
+                            <label for="email" class="form-label fw-semibold">{{ __('Email Address') }}</label>
+                            <input id="email" type="email"
                                 class="form-control @error('email') is-invalid @enderror"
                                 name="email"
                                 value="{{ old('email') }}"
+                                placeholder="name@company.com"
                                 required>
 
                             @error('email')
@@ -59,11 +63,12 @@
 
                         <!-- Password -->
                         <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password"
+                            <label for="password" class="form-label fw-semibold">{{ __('Password') }}</label>
+                            <input id="password" type="password"
                                 class="form-control @error('password') is-invalid @enderror"
                                 name="password"
-                                required>
+                                placeholder="Create a strong password"
+                                required autocomplete="new-password">
 
                             @error('password')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -72,23 +77,32 @@
 
                         <!-- Confirm Password -->
                         <div class="mb-3">
-                            <label class="form-label">Confirm Password</label>
-                            <input type="password"
+                            <label for="password_confirmation" class="form-label fw-semibold">{{ __('Confirm Password') }}</label>
+                            <input id="password_confirmation" type="password"
                                 class="form-control"
                                 name="password_confirmation"
-                                required>
+                                placeholder="Re-enter your password"
+                                required autocomplete="new-password">
                         </div>
 
-                        <div class="d-grid">
-                            <button class="btn btn-primary">
-                                Register
+                        <!-- Submit Button -->
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary py-2 fw-semibold">
+                                {{ __('Complete Registration') }}
                             </button>
+                        </div>
+
+                        <!-- Link to Login -->
+                        <div class="mt-3 text-center">
+                            <small class="text-muted">Already registered? 
+                                <a href="{{ route('login') }}" class="text-decoration-none fw-semibold">Log In here</a>
+                            </small>
                         </div>
                     </form>
                 </div>
 
-                <div class="card-footer text-center text-muted">
-                    © 2025 MyEventSystem
+                <div class="card-footer text-center text-muted py-3 bg-light border-0">
+                    <small>&copy; {{ date('Y') }} ITDMS. User registrations are audited under security compliance.</small>
                 </div>
             </div>
         </div>

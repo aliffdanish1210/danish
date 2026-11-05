@@ -77,7 +77,7 @@ php artisan serve
 
 If you change routes or configurations, clear cache using:
 
-php artisan optimize:clear
+
 
 📦 Dependencies
 

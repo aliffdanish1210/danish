@@ -38,7 +38,38 @@ class ResetPasswordController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+    /**
+     * Entry point for both the API (JSON) and the web reset form.
+     */
     public function reset(Request $request)
+    {
+        // The web form may send "password"; the API uses "new_password"
+        if (!$request->filled('new_password') && $request->filled('password')) {
+            $request->merge(['new_password' => $request->password]);
+        }
+
+        $isApi = $request->expectsJson() || $request->is('api/*');
+
+        if (!$isApi && $request->new_password !== $request->new_password_confirmation) {
+            return back()->withErrors(['new_password' => 'Password confirmation does not match.']);
+        }
+
+        $response = $this->resetPassword($request);
+
+        if ($isApi) {
+            return $response;
+        }
+
+        $data = $response instanceof \Illuminate\Http\JsonResponse ? $response->getData(true) : [];
+
+        if (!empty($data['status'])) {
+            return redirect('/login')->with('status', $data['message'] ?? 'Password changed successfully');
+        }
+
+        return back()->withErrors(['new_password' => $data['message'] ?? 'Failed to reset password.']);
+    }
+
+    protected function resetPassword(Request $request)
     {
         // Validate token existance/string validity
         if($token = DB::table('password_resets')->where('token', $request->token)->first()) {

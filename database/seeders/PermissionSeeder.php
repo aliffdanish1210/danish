@@ -73,41 +73,5 @@ class PermissionSeeder extends Seeder
 
         $role3 = Role::create(['name' => 'User', 'guard_name' => 'api']);
 
-        // create demo users
-        $user = User::factory()->create([
-            'user_id' => 'admin',
-            'name' => 'Example Admin',
-            'email' => 'admin@dimensikini.xyz',
-            'password_created_at' => Carbon::now()
-        ]);
-        $user->assignRole($role1);
-        PasswordHistory::factory()->create([
-            'user_id' => $user->user_id,
-            'password' => $user->password
-        ]);
-
-        $user = User::factory()->create([
-            'user_id' => 'moderator',
-            'name' => 'Example Moderator',
-            'email' => 'moderator@dimensikini.xyz',
-            'password_created_at' => Carbon::now()
-        ]);
-        $user->assignRole($role2);
-        PasswordHistory::factory()->create([
-            'user_id' => $user->user_id,
-            'password' => $user->password
-        ]);
-
-        $user = User::factory()->create([
-            'user_id' => 'user',
-            'name' => 'Example User',
-            'email' => 'user@dimensikini.xyz',
-            'password_created_at' => Carbon::now()
-        ]);
-        $user->assignRole($role3);
-        PasswordHistory::factory()->create([
-            'user_id' => $user->user_id,
-            'password' => $user->password
-        ]);
     }
 }
