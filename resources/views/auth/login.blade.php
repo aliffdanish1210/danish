@@ -20,6 +20,13 @@
                         </div>
                     @endif
 
+                    {{-- Success message, e.g. after registration --}}
+                    @if (session('success') || session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('success') ?? session('status') }}
+                        </div>
+                    @endif
+
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
@@ -34,21 +41,24 @@
                                 required autofocus>
 
                             @error('user_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <!-- Password -->
                         <div class="mb-3">
                             <label for="password" class="form-label fw-semibold">{{ __('Password') }}</label>
+                            <div class="input-group">
                             <input id="password" type="password"
                                 class="form-control @error('password') is-invalid @enderror"
                                 name="password"
                                 placeholder="Enter your password"
                                 required autocomplete="current-password">
+                                <button type="button" class="btn btn-outline-secondary" data-toggle-password="#password" aria-label="Show password" aria-pressed="false">Show</button>
+                            </div>
 
                             @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
 
@@ -87,4 +97,19 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Show / hide password buttons
+    document.querySelectorAll('[data-toggle-password]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var input = document.querySelector(btn.getAttribute('data-toggle-password'));
+            if (!input) { return; }
+            var show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            btn.textContent = show ? 'Hide' : 'Show';
+            btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+            btn.setAttribute('aria-pressed', show ? 'true' : 'false');
+        });
+    });
+</script>
 @endsection

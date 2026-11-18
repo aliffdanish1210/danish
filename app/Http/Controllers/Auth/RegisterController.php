@@ -78,11 +78,8 @@ class RegisterController extends Controller
         // Fire Registered event to send verification email
         event(new Registered($user));
 
-        // Optional: log the user in
-        $this->guard()->login($user);
-
-        // Redirect to a page telling user to verify email
-        return redirect($this->redirectPath())
-            ->with('success', 'Registration successful! Please check your email to verify your account.');
+        // Do not log the user in; send them to the login page instead
+        return redirect('/login')
+            ->with('success', 'Registration successful! Please log in. A verification email has been sent to your email address.');
     }
 }

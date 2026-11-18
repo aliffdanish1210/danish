@@ -27,7 +27,7 @@
                                 required autofocus>
 
                             @error('name')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
 
@@ -42,7 +42,7 @@
                                 required>
 
                             @error('user_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
 
@@ -57,32 +57,38 @@
                                 required>
 
                             @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <!-- Password -->
                         <div class="mb-3">
                             <label for="password" class="form-label fw-semibold">{{ __('Password') }}</label>
+                            <div class="input-group">
                             <input id="password" type="password"
                                 class="form-control @error('password') is-invalid @enderror"
                                 name="password"
                                 placeholder="Create a strong password"
                                 required autocomplete="new-password">
+                                <button type="button" class="btn btn-outline-secondary" data-toggle-password="#password" aria-label="Show password" aria-pressed="false">Show</button>
+                            </div>
 
                             @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <!-- Confirm Password -->
                         <div class="mb-3">
                             <label for="password_confirmation" class="form-label fw-semibold">{{ __('Confirm Password') }}</label>
+                            <div class="input-group">
                             <input id="password_confirmation" type="password"
                                 class="form-control"
                                 name="password_confirmation"
                                 placeholder="Re-enter your password"
                                 required autocomplete="new-password">
+                                <button type="button" class="btn btn-outline-secondary" data-toggle-password="#password_confirmation" aria-label="Show password" aria-pressed="false">Show</button>
+                            </div>
                         </div>
 
                         <!-- Submit Button -->
@@ -108,4 +114,19 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Show / hide password buttons
+    document.querySelectorAll('[data-toggle-password]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var input = document.querySelector(btn.getAttribute('data-toggle-password'));
+            if (!input) { return; }
+            var show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            btn.textContent = show ? 'Hide' : 'Show';
+            btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+            btn.setAttribute('aria-pressed', show ? 'true' : 'false');
+        });
+    });
+</script>
 @endsection
